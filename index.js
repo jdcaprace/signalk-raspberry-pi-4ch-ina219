@@ -253,11 +253,12 @@ module.exports = function (app) {
     }
 
 	  // Read ina219 sensor data -- 4 channels
+    // TODO - When working, to be modified fo N channels
     async function readina219() {
-		  const sensorIN1 = ina219(options.IN1_i2c_address, options.i2c_bus);
-      const sensorIN2 = ina219(options.IN2_i2c_address, options.i2c_bus);
-      const sensorIN3 = ina219(options.IN3_i2c_address, options.i2c_bus);
-      const sensorIN4 = ina219(options.IN4_i2c_address, options.i2c_bus);
+		  const sensorIN1 = ina219(Number(options.IN1_i2c_address), options.i2c_bus);
+      const sensorIN2 = ina219(Number(options.IN2_i2c_address), options.i2c_bus);
+      const sensorIN3 = ina219(Number(options.IN3_i2c_address), options.i2c_bus);
+      const sensorIN4 = ina219(Number(options.IN4_i2c_address), options.i2c_bus);
             
       await sensorIN1.calibrate32V2A();
       await sensorIN2.calibrate32V2A();
@@ -270,6 +271,11 @@ module.exports = function (app) {
       console.log("IN1 Shunt voltage (mV): " + shuntvoltageIN1);
       const shuntcurrentIN1 = await sensorIN1.getCurrent_mA();
       console.log("IN1 Current (mA): " + shuntcurrentIN1);
+      // Change units to be compatible with SignalK
+      shuntcurrentIN1A = shuntcurrentIN1 / 1000;
+      console.log("IN1 Load Current (A): " + shuntcurrentIN1A);
+      loadvoltageIN1V = busvoltageIN1 + (shuntvoltageIN1 / 1000);
+      console.log("IN1 Load voltage (V): " + loadvoltageIN1V);
 
 		  const busvoltageIN2 = await sensorIN2.getBusVoltage_V();
       console.log("IN2 Bus voltage (V): " + busvoltageIN2);
@@ -277,6 +283,11 @@ module.exports = function (app) {
       console.log("IN2 Shunt voltage (mV): " + shuntvoltageIN2);
       const shuntcurrentIN2 = await sensorIN2.getCurrent_mA();
       console.log("IN2 Current (mA): " + shuntcurrentIN2);
+      // Change units to be compatible with SignalK
+      shuntcurrentIN2A = shuntcurrentIN2 / 1000;
+      console.log("IN2 Load Current (A): " + shuntcurrentIN2A);
+      loadvoltageIN2V = busvoltageIN2 + (shuntvoltageIN2 / 1000);
+      console.log("IN2 Load voltage (V): " + loadvoltageIN2V);
 
       const busvoltageIN3 = await sensorIN3.getBusVoltage_V();
       console.log("IN3 Bus voltage (V): " + busvoltageIN3);
@@ -284,6 +295,11 @@ module.exports = function (app) {
       console.log("IN3 Shunt voltage (mV): " + shuntvoltageIN3);
       const shuntcurrentIN3 = await sensorIN3.getCurrent_mA();
       console.log("IN3 Current (mA): " + shuntcurrentIN3);
+      // Change units to be compatible with SignalK
+      shuntcurrentIN3A = shuntcurrentIN3 / 1000;
+      console.log("IN3 Load Current (A): " + shuntcurrentIN3A);
+      loadvoltageIN3V = busvoltageIN3 + (shuntvoltageIN3 / 1000);
+      console.log("IN3 Load voltage (V): " + loadvoltageIN3V);
 
       const busvoltageIN4 = await sensorIN4.getBusVoltage_V();
       console.log("IN4 Bus voltage (V): " + busvoltageIN4);
@@ -291,15 +307,20 @@ module.exports = function (app) {
       console.log("IN4 Shunt voltage (mV): " + shuntvoltageIN4);
       const shuntcurrentIN4 = await sensorIN4.getCurrent_mA();
       console.log("IN4 Current (mA): " + shuntcurrentIN4);
+      // Change units to be compatible with SignalK
+      shuntcurrentIN4A = shuntcurrentIN4 / 1000;
+      console.log("IN4 Load Current (A): " + shuntcurrentIN4A);
+      loadvoltageIN4V = busvoltageIN4 + (shuntvoltageIN4 / 1000);
+      console.log("IN4 Load voltage (V): " + loadvoltageIN4V);
 
         //console.log(`data = ${JSON.stringify(data, null, 2)}`);
 		    //console.log(data)
         
         // create message
-        var deltaIN1 = createDeltaMessageIN1(shuntvoltageIN1, shuntcurrentIN1)
-        var deltaIN2 = createDeltaMessageIN2(shuntvoltageIN2, shuntcurrentIN2)
-        var deltaIN3 = createDeltaMessageIN3(shuntvoltageIN3, shuntcurrentIN3)
-        var deltaIN4 = createDeltaMessageIN4(shuntvoltageIN4, shuntcurrentIN4)
+        var deltaIN1 = createDeltaMessageIN1(loadvoltageIN1V, shuntcurrentIN1A)
+        var deltaIN2 = createDeltaMessageIN2(loadvoltageIN2V, shuntcurrentIN2A)
+        var deltaIN3 = createDeltaMessageIN3(loadvoltageIN3V, shuntcurrentIN3A)
+        var deltaIN4 = createDeltaMessageIN4(loadvoltageIN4V, shuntcurrentIN4A)
         
         // send data
         app.handleMessage(plugin.id, deltaIN1)
