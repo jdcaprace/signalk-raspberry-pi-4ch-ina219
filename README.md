@@ -16,7 +16,7 @@ The model used: https://www.amazon.com/Waveshare-Current-Power-Monitor-HAT/dp/B0
 
 This is the Waveshare 4-channels current and power monitor HAT designed for Raspberry Pi. Via the I2C interface, it is easy to monitor each channel's current, voltage, and power consumption, as well as the voltage between both sides of the sampling resistor.
 
-![ina219](../master/Pictures/waveshare_ina219.png)
+![ina219](../main/Pictures/waveshare_ina219.png)
 
 Learn more on the wiki of the module: https://www.waveshare.com/wiki/Current/Power_Monitor_HAT
 
