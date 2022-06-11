@@ -25,7 +25,7 @@ module.exports = function (app) {
       i2c_bus: {
         type: 'integer',
         title: 'I2C bus number',
-        default: 1,
+        default: 1
       },
       IN1_pathvoltage: {
         type: 'string',
@@ -254,10 +254,10 @@ module.exports = function (app) {
 
 	  // Read ina219 sensor data -- 4 channels
     async function readina219() {
-		  const sensorIN1 = await ina219(options.IN1_i2c_address, options.i2c_bus);
-      const sensorIN2 = await ina219(options.IN2_i2c_address, options.i2c_bus);
-      const sensorIN3 = await ina219(options.IN3_i2c_address, options.i2c_bus);
-      const sensorIN4 = await ina219(options.IN4_i2c_address, options.i2c_bus);
+		  const sensorIN1 = ina219(options.IN1_i2c_address, options.i2c_bus);
+      const sensorIN2 = ina219(options.IN2_i2c_address, options.i2c_bus);
+      const sensorIN3 = ina219(options.IN3_i2c_address, options.i2c_bus);
+      const sensorIN4 = ina219(options.IN4_i2c_address, options.i2c_bus);
             
       await sensorIN1.calibrate32V2A();
       await sensorIN2.calibrate32V2A();
