@@ -37,9 +37,28 @@ INx+ is the current input, and INx- is the current output. Module measure the di
 
 The module supports measuring bidirectional current, so users can invert the input and output.
 
+Note that you must connect GND when testing different power adpter, otherwise, the VBus voltage cannot be measured.
+
 WARNING: the current range is [-3.2 A to 3.2 A] and voltage range [0-26 VDC].
 
-Note that you must connect GND when testing different power adpter, otherwise, the VBus voltage cannot be measured.
+## How to measure currents higher than 3A
+Two options can be developped: (i) using an external shunt, (ii) using an non invasive current sensor.
+
+### Using an external shunt
+In order to apply this solution you will need to (1) remove the PCB shunts with a soldering iron, (2) buy an external shunt adapted to the maximum value of the current that you want to measure.
+
+There is an excellent SignalK plugin [signalk-raspberry-pi-ina219hat] thay has been developped by Brian Scally that can be used in this case. You can also have a look on the other developments of Brian here: https://github.com/scallybmHome
+
+### Using an indirect current sensor
+In order to apply this solution you can use this plugin buying one or several non invasive current sensor depending of your needs (hall open loop current sensor).
+
+The sugestion is to find sensors that has supply voltage of +5V and a rated output of 2.5+-0.625V with a frequency range of DC to 25KHz. In that way you can measure the current by measuring a voltage.
+
+We suggest the use of the [YHDC](https://en.yhdc.com/product/Hall-split-core-current-sensor-21#c_product_list-14969874102643207-1) sensors:
+
+* Model [HSTS016L](https://pt.aliexpress.com/item/32836805934.html) - With rated inputs from +-10A to +-200A
+* Model [HST(S21)](https://pt.aliexpress.com/item/32656614775.html) - With rated inputs from +-50A to +-600A
+* Model [HST(S)30](https://pt.aliexpress.com/item/32658308104.html) - With rated inputs from +-100A to +-1000A
 
 ## Troubleshooting
 When you first start SK, you should see one of two things in the /var/log/syslog; ina219 initialization succeeded or ina219 initialization failed along with details of the failure.

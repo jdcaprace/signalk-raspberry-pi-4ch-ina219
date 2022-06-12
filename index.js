@@ -34,6 +34,12 @@ module.exports = function (app) {
         default: 'electrical.batteries.battery01.voltage' //Units: V (Volt)
 		    //https://signalk.org/specification/1.5.0/doc/vesselsBranch.html
       },
+      IN1_voltagemultiplier: {
+        type: 'number',
+        title: 'IN1 voltage multiplier',
+        decription: 'Parameter that is going to multiply the IN1 voltage (default: 1). Use value different of 1 for external hall open loop current sensor.',
+        default: 1,
+      },
       IN1_reportcurrent: {
         type: 'boolean',
         title: 'Also send the IN1 current data to Signalk',
@@ -57,6 +63,12 @@ module.exports = function (app) {
         description: 'This is used to build the path in Signal K for the IN2 voltage sensor data',
         default: 'electrical.batteries.battery02.voltage' //Units: V (Volt)
 		    //https://signalk.org/specification/1.5.0/doc/vesselsBranch.html
+      },
+      IN2_voltagemultiplier: {
+        type: 'number',
+        title: 'IN2 voltage multiplier',
+        decription: 'Parameter that is going to multiply the IN2 voltage (default: 1). Use value different of 1 for external hall open loop current sensor.',
+        default: 1,
       },
       IN2_reportcurrent: {
         type: 'boolean',
@@ -82,6 +94,12 @@ module.exports = function (app) {
         default: 'electrical.batteries.battery03.voltage' //Units: V (Volt)
 		    //https://signalk.org/specification/1.5.0/doc/vesselsBranch.html
       },
+      IN3_voltagemultiplier: {
+        type: 'number',
+        title: 'IN3 voltage multiplier',
+        decription: 'Parameter that is going to multiply the IN3 voltage (default: 1). Use value different of 1 for external hall open loop current sensor.',
+        default: 1,
+      },
       IN3_reportcurrent: {
         type: 'boolean',
         title: 'Also send the IN3 current data to Signalk',
@@ -105,6 +123,12 @@ module.exports = function (app) {
         description: 'This is used to build the path in Signal K for the IN4 voltage sensor data',
         default: 'electrical.batteries.battery04.voltage' //Units: V (Volt)
 		    //https://signalk.org/specification/1.5.0/doc/vesselsBranch.html
+      },
+      IN4_voltagemultiplier: {
+        type: 'number',
+        title: 'IN4 voltage multiplier',
+        decription: 'Parameter that is going to multiply the IN4 voltage (default: 1). Use value different of 1 for external hall open loop current sensor.',
+        default: 1,
       },
       IN4_reportcurrent: {
         type: 'boolean',
@@ -253,7 +277,7 @@ module.exports = function (app) {
     }
 
 	  // Read ina219 sensor data -- 4 channels
-    // TODO - When working, to be modified fo N channels
+    // TODO - When working, to be modified fo N channels (do it more pretty :-) )
     async function readina219() {
 		  const sensorIN1 = ina219(Number(options.IN1_i2c_address), options.i2c_bus);
       const sensorIN2 = ina219(Number(options.IN2_i2c_address), options.i2c_bus);
@@ -274,7 +298,7 @@ module.exports = function (app) {
       // Change units to be compatible with SignalK
       shuntcurrentIN1A = shuntcurrentIN1 / 1000;
       console.log("IN1 Load Current (A): " + shuntcurrentIN1A);
-      loadvoltageIN1V = busvoltageIN1 + (shuntvoltageIN1 / 1000);
+      loadvoltageIN1V = (busvoltageIN1 + (shuntvoltageIN1 / 1000))*IN1_voltagemultiplier;
       console.log("IN1 Load voltage (V): " + loadvoltageIN1V);
 
 		  const busvoltageIN2 = await sensorIN2.getBusVoltage_V();
@@ -286,7 +310,7 @@ module.exports = function (app) {
       // Change units to be compatible with SignalK
       shuntcurrentIN2A = shuntcurrentIN2 / 1000;
       console.log("IN2 Load Current (A): " + shuntcurrentIN2A);
-      loadvoltageIN2V = busvoltageIN2 + (shuntvoltageIN2 / 1000);
+      loadvoltageIN2V = (busvoltageIN2 + (shuntvoltageIN2 / 1000))*IN2_voltagemultiplier;
       console.log("IN2 Load voltage (V): " + loadvoltageIN2V);
 
       const busvoltageIN3 = await sensorIN3.getBusVoltage_V();
@@ -298,7 +322,7 @@ module.exports = function (app) {
       // Change units to be compatible with SignalK
       shuntcurrentIN3A = shuntcurrentIN3 / 1000;
       console.log("IN3 Load Current (A): " + shuntcurrentIN3A);
-      loadvoltageIN3V = busvoltageIN3 + (shuntvoltageIN3 / 1000);
+      loadvoltageIN3V = (busvoltageIN3 + (shuntvoltageIN3 / 1000))*IN3_voltagemultiplier;
       console.log("IN3 Load voltage (V): " + loadvoltageIN3V);
 
       const busvoltageIN4 = await sensorIN4.getBusVoltage_V();
@@ -310,7 +334,7 @@ module.exports = function (app) {
       // Change units to be compatible with SignalK
       shuntcurrentIN4A = shuntcurrentIN4 / 1000;
       console.log("IN4 Load Current (A): " + shuntcurrentIN4A);
-      loadvoltageIN4V = busvoltageIN4 + (shuntvoltageIN4 / 1000);
+      loadvoltageIN4V = (busvoltageIN4 + (shuntvoltageIN4 / 1000))*IN4_voltagemultiplier;
       console.log("IN4 Load voltage (V): " + loadvoltageIN4V);
 
         //console.log(`data = ${JSON.stringify(data, null, 2)}`);
