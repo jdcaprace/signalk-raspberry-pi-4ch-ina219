@@ -290,55 +290,55 @@ module.exports = function (app) {
       await sensorIN4.calibrate32V2A();
 
 		  const busvoltageIN1 = await sensorIN1.getBusVoltage_V();
-      console.log("IN1 Bus voltage (V): " + busvoltageIN1);
+      app.debug("IN1 Bus voltage (V): " + busvoltageIN1);
       const shuntvoltageIN1 = await sensorIN1.getShuntVoltage_mV();
-      console.log("IN1 Shunt voltage (mV): " + shuntvoltageIN1);
+      app.debug("IN1 Shunt voltage (mV): " + shuntvoltageIN1);
       const shuntcurrentIN1 = await sensorIN1.getCurrent_mA();
-      console.log("IN1 Current (mA): " + shuntcurrentIN1);
+      app.debug("IN1 Current (mA): " + shuntcurrentIN1);
       // Change units to be compatible with SignalK
       shuntcurrentIN1A = shuntcurrentIN1 / 1000;
-      console.log("IN1 Load Current (A): " + shuntcurrentIN1A);
+      app.debug("IN1 Load Current (A): " + shuntcurrentIN1A);
       loadvoltageIN1V = (busvoltageIN1 + (shuntvoltageIN1 / 1000))*options.IN1_voltagemultiplier;
-      console.log("IN1 Load voltage (V): " + loadvoltageIN1V);
+      app.debug("IN1 Load voltage (V): " + loadvoltageIN1V);
 
 		  const busvoltageIN2 = await sensorIN2.getBusVoltage_V();
-      console.log("IN2 Bus voltage (V): " + busvoltageIN2);
+      app.debug("IN2 Bus voltage (V): " + busvoltageIN2);
       const shuntvoltageIN2 = await sensorIN2.getShuntVoltage_mV();
-      console.log("IN2 Shunt voltage (mV): " + shuntvoltageIN2);
+      app.debug("IN2 Shunt voltage (mV): " + shuntvoltageIN2);
       const shuntcurrentIN2 = await sensorIN2.getCurrent_mA();
-      console.log("IN2 Current (mA): " + shuntcurrentIN2);
+      app.debug("IN2 Current (mA): " + shuntcurrentIN2);
       // Change units to be compatible with SignalK
       shuntcurrentIN2A = shuntcurrentIN2 / 1000;
-      console.log("IN2 Load Current (A): " + shuntcurrentIN2A);
+      app.debug("IN2 Load Current (A): " + shuntcurrentIN2A);
       loadvoltageIN2V = (busvoltageIN2 + (shuntvoltageIN2 / 1000))*options.IN2_voltagemultiplier;
-      console.log("IN2 Load voltage (V): " + loadvoltageIN2V);
+      app.debug("IN2 Load voltage (V): " + loadvoltageIN2V);
 
       const busvoltageIN3 = await sensorIN3.getBusVoltage_V();
-      console.log("IN3 Bus voltage (V): " + busvoltageIN3);
+      app.debug("IN3 Bus voltage (V): " + busvoltageIN3);
       const shuntvoltageIN3 = await sensorIN3.getShuntVoltage_mV();
-      console.log("IN3 Shunt voltage (mV): " + shuntvoltageIN3);
+      app.debug("IN3 Shunt voltage (mV): " + shuntvoltageIN3);
       const shuntcurrentIN3 = await sensorIN3.getCurrent_mA();
-      console.log("IN3 Current (mA): " + shuntcurrentIN3);
+      app.debug("IN3 Current (mA): " + shuntcurrentIN3);
       // Change units to be compatible with SignalK
       shuntcurrentIN3A = shuntcurrentIN3 / 1000;
-      console.log("IN3 Load Current (A): " + shuntcurrentIN3A);
+      app.debug("IN3 Load Current (A): " + shuntcurrentIN3A);
       loadvoltageIN3V = (busvoltageIN3 + (shuntvoltageIN3 / 1000))*options.IN3_voltagemultiplier;
-      console.log("IN3 Load voltage (V): " + loadvoltageIN3V);
+      app.debug("IN3 Load voltage (V): " + loadvoltageIN3V);
 
       const busvoltageIN4 = await sensorIN4.getBusVoltage_V();
-      console.log("IN4 Bus voltage (V): " + busvoltageIN4);
+      app.debug("IN4 Bus voltage (V): " + busvoltageIN4);
       const shuntvoltageIN4 = await sensorIN4.getShuntVoltage_mV();
-      console.log("IN4 Shunt voltage (mV): " + shuntvoltageIN4);
+      app.debug("IN4 Shunt voltage (mV): " + shuntvoltageIN4);
       const shuntcurrentIN4 = await sensorIN4.getCurrent_mA();
-      console.log("IN4 Current (mA): " + shuntcurrentIN4);
+      app.debug("IN4 Current (mA): " + shuntcurrentIN4);
       // Change units to be compatible with SignalK
       shuntcurrentIN4A = shuntcurrentIN4 / 1000;
-      console.log("IN4 Load Current (A): " + shuntcurrentIN4A);
+      app.debug("IN4 Load Current (A): " + shuntcurrentIN4A);
       loadvoltageIN4V = (busvoltageIN4 + (shuntvoltageIN4 / 1000))*options.IN4_voltagemultiplier;
-      console.log("IN4 Load voltage (V): " + loadvoltageIN4V);
+      app.debug("IN4 Load voltage (V): " + loadvoltageIN4V);
 
-        //console.log(`data = ${JSON.stringify(data, null, 2)}`);
-		    //console.log(data)
+        //app.debug(`data = ${JSON.stringify(data, null, 2)}`);
+		    //app.debug(data)
         
         // create message
         var deltaIN1 = createDeltaMessageIN1(loadvoltageIN1V, shuntcurrentIN1A)
@@ -356,7 +356,7 @@ module.exports = function (app) {
         //await sensor.close()
 
       .catch((err) => {
-      console.log(`ina219 read error: ${err}`);
+      app.debug(`ina219 read error: ${err}`);
       });
     }
 
